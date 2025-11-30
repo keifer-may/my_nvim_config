@@ -1,7 +1,7 @@
 local vim = vim
 
---Begin by setting general vim options:
---vim.cmd("set clipboard+=unnamedplus")
+-- Begin by setting general vim options:
+-- vim.cmd("set clipboard+=unnamedplus")
 -- !Make sure you have xclip or something like it installed!
 vim.o.clipboard = 'unnamed,unnamedplus'
 vim.o.background = 'dark'
@@ -22,12 +22,12 @@ vim.o.winborder = 'rounded'
     Set the map leader key
     When in normal mode, use space to get special keymaps we'll be setting
 
-]] --
+]]--
 
 vim.g.mapleader = ' '
 
 -- Set some keymaps for leader keys that will source, write to the file, and quit the file
-vim.keymap.set('n', '<leader>o', ':update<CR> :source<CR>')
+vim.keymap.set('n', '<leader>u', ':update<CR> :source<CR>')
 vim.keymap.set('n', '<leader>w', ':write<CR>')
 vim.keymap.set('n', '<leader>q', ':quit<CR>')
 
@@ -50,9 +50,7 @@ vim.keymap.set('n', '<leader>q', ':quit<CR>')
             For more info on Oil go to: https://github.com/stevearc/oil.nvim
             Oil is a file explorer that lets you edit your filesystem like a nvim buffer
 
-        - NVIM Mini-Pick,
-            For more on NVIM Mini-Pick go to: https://github.com/nvim-mini/mini.pick
-            Mini-Pick provides a fuzzy finder and buffer search
+        - NVIM Mini,
             Maybe checkout more Mini tools or info?: https://nvim-mini.org/mini.nvim/
 
         - NVIM LSP Config,
@@ -63,7 +61,7 @@ vim.keymap.set('n', '<leader>q', ':quit<CR>')
             Get an auto updating preview of your html site
             https://github.com/chomosuke/typst-preview.nvim
 
-]] --
+]]--
 
 vim.pack.add({
     { src = 'https://github.com/vague-theme/vague.nvim' },
@@ -72,8 +70,9 @@ vim.pack.add({
     { src = 'https://github.com/shaunsingh/nord.nvim' },
     { src = 'https://github.com/AlexvZyl/nordic.nvim' },
     { src = 'https://github.com/cocopon/iceberg.vim' },
-    { src = 'https://github.com/stevearc/oil.nvim' },
-    { src = 'https://github.com/echasnovski/mini.pick' },
+    --{ src = 'https://github.com/stevearc/oil.nvim' },
+    --{ src = 'https://github.com/echasnovski/mini.pick' },
+    { src = 'https://github.com/nvim-mini/mini.nvim' },
     { src = 'https://github.com/neovim/nvim-lspconfig' },
     { src = 'https://github.com/chomosuke/typst-preview.nvim' },
     --{src = ''},
@@ -92,15 +91,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.cmd('set completeopt+=noselect')
 
 -- Require the NVIM Mini-Pick and NVIM Oil are setup
-require 'mini.pick'.setup()
-require 'oil'.setup()
+require 'mini.pick'.setup() -- Provides a fuzzy finder/buffer search for files
+require 'mini.files'.setup() -- Provides a way to navigate filesystem and open buffers
+require 'mini.icons'.setup() -- Provides fancy icons to make things pretty
+require 'mini.completion'.setup() -- Provides autocomplete, working with LSPs
+require 'mini.comment'.setup() -- Provides line or block comments - the hotkey is gc or gcc for toggling
+require 'mini.ai'.setup() -- Provides advanced around and inside (a or i) functionality
 
 -- Setup some leader keymaps for LSP formatting, Mini-Pick, and Oil
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 vim.keymap.set('n', '<leader>f', ':Pick files<CR>')
 vim.keymap.set('n', '<leader>b', ':Pick buffers<CR>')
 vim.keymap.set('n', '<leader>h', ':Pick help<CR>')
-vim.keymap.set('n', '<leader>e', ':Oil<CR>')
+vim.keymap.set('n', '<leader>e', ':lua MiniFiles.open()<CR>')
+--vim.keymap.set('n', '<leader>e', ':Oil<CR>')
+--vim.keymap.set('n', '<leader>o', ':Oil ')
 
 -- Setup the Lua Language Server (what a pain in the ass)
 vim.lsp.config['lua_ls'] = {
@@ -112,12 +117,12 @@ vim.lsp.config['lua_ls'] = {
         Sets the "workspace" to the directory where any of these files is found.
         Files that share a root directory will reuse the LSP server connection.
         Nested lists indicate equal priority, see |vim.lsp.Config|.
-    ]] --
+    ]]--
     root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
     --[[
         Specific settings to send to the server. The schema is server-defined.
         Example: https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
-    ]] --
+    ]]--
     settings = {
         Lua = {
             runtime = {
@@ -172,7 +177,7 @@ vim.lsp.config['emmet-ls'] = {
     --------------------------------------------------
 
 
-]] --
+]]--
 
 vim.lsp.enable({ 'lua_ls', 'pylsp', 'gopls', 'ccls', 'rust_analyzer', 'emmet-ls' })
 
@@ -205,5 +210,5 @@ vim.cmd('colorscheme iceberg')
 -- https://github.com/nakst/gf
 -- A fun debugging the debugger video: https://www.youtube.com/watch?v=ux3s1IIvNdg
 --
-]] --
+]]--
 
